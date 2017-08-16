@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://192.168.0.222:8020/exclusive/index.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <title>专属app</title>
+    <link href="./专属app_files/z.css" rel="stylesheet">
+    <link href="./专属app_files/mui.css" rel="stylesheet">
+    <link href="./专属app_files/index.css" rel="stylesheet">
+</head>
+<body>
+	
+	<!--明天要看的 file:///E:/webapp/6-10(1)/轮播图
+		3.fullpage和animate.css实现欢迎页.html 6-11
+	-->
+	<header>
+		<h1>
+			<a href="http://192.168.0.222:8020/exclusive/index.html">微信</a>
+		</h1>
+		<div> 
+			<a href="http://192.168.0.222:8020/exclusive/login.html">登录</a>
+		</div>
+	</header>
+	
+	<section class="slider">
+		<ul style="width: 2898px;">
+			<li>
+				<img src="./专属app_files/sanye.png">
+				<div class="love">
+					<h3>礼拜一:</h3>
+					<p>也不知道今天能不能做完啊 啊 啊啊啊 啊啊啊啊 啊啊啊啊啊!</p>
+				</div>
+			</li>
+			<li>
+				<img src="./专属app_files/01.jpg">
+				<div class="love">
+					<h3>礼拜二:</h3>
+					<p>也不知道今天能不能做完啊 啊 啊啊啊 啊啊啊啊 啊啊啊啊啊!</p>
+				</div>
+			</li>
+			<li>
+				<img src="./专属app_files/02.jpg">
+				<div class="love">
+					<h3>礼拜三:</h3>
+					<p>也不知道今天能不能做完啊 啊 啊啊啊 啊啊啊啊 啊啊啊啊啊!</p>
+				</div>
+			</li>
+			<li>
+				<img src="./专属app_files/03.jpg">
+				<div class="love">
+					<h3>礼拜四:</h3>
+					<p>也不知道今天能不能做完啊 啊 啊啊啊 啊啊啊啊 啊啊啊啊啊!</p>
+				</div>
+			</li>
+			<li>
+				<img src="./专属app_files/04.jpg">
+				<div class="love">
+					<h3>礼拜五:</h3>
+					<p>也不知道今天能不能做完啊 啊 啊啊啊 啊啊啊啊 啊啊啊啊啊!</p>
+				</div>
+			</li>
+			<li>
+				<img src="./专属app_files/05.jpg">
+				<div class="love">
+					<h3>礼拜六:</h3>
+					<p>也不知道今天能不能做完啊 啊 啊啊啊 啊啊啊啊 啊啊啊啊啊!</p>
+				</div>
+			</li>
+			<li>
+				<img src="./专属app_files/06.jpg">
+				<div class="love">
+					<h3>礼拜日:</h3>
+					<p>也不知道今天能不能做完啊 啊 啊啊啊 啊啊啊啊 啊啊啊啊啊!</p>
+				</div>
+			</li>
+		</ul>
+	</section>
+	
+	<script type="text/javascript">
+		// 移动端轮播图
+		// 1) 准备基本元素
+		var body_w = document.body.offsetWidth; //获取屏幕的宽度
+		console.log(body_w);
+		var ul     = document.querySelector('ul'); //获取ul    有All 和没有All的区别?
+		var imgs   = document.querySelectorAll('img').length; 
+		console.log(imgs);
+		ul.style.width = imgs * body_w + "px";  // 报错了!!!
+		
+		
+		var cur = 0 ; //当前图片的索引值
+		var x_start , x_end ;
+		
+		// 4) 让ul能监听到左,右滑动事件
+		ul.addEventListener("swipeLeft",function(){
+			//左滑需要执行的动作
+			cur++; 
+			if(cur > imgs-1){ //让图片滑动到最后一张是停止
+				cur=0 ;
+				ul.style.transition = "" ; 
+			}
+			//更改ul的translate值,即换图
+			ul.style.transform = "translateX("+(-1*cur*body_w)+"px"; 
+			console.log("swipeLeft");
+		})
+		ul.addEventListener("swipeRight",function(){
+			//右滑需要执行的动作
+			cur-- ;
+			if(cur<0){ //让图片滑动到最后一张是停止
+				cur = imgs-1 ;
+				ul.style.transition = "" ;
+			}
+			//更改ul的translate值,即换图
+			ul.style.transform = "translateX("+(-1*cur*body_w)+"px";
+			console.log("swipeRight");
+		})
+		
+		// 2) 获取鼠标的,鼠标按下位置(起点位置)
+		ul.addEventListener("touchstart",function(e){ //移动端添加事件监听   
+			x_start = e.targetTouches[0].pageX;     //起点: touchstart事件中的事件对象
+			console.log(x_start);
+		});
+		// 2) 获取鼠标的,鼠标抬起位置(终点位置)
+		ul.addEventListener("touchend",function(e){ //移动端添加事件监听   
+			x_end = e.changedTouches[0].pageX;     //终点: touchend事件中的事件对象
+			console.log(x_end);
+			//5) 判断执行向左还是向右滑动
+			if(x_end - x_start > 30 ){
+				//向右
+				trigger(ul,"swipeRight"); //使用自定义事件的函数
+			}else{
+				//向左
+				trigger(ul,"swipeLeft");
+			}
+		});
+		// 3) 封装一个,创建一个自定义事件的函数
+		function trigger(dom,eventName){ // 参数: 元素 , 事件名称
+			//首先创建一个自定义事件对象
+			var ev = document.createEvent("customEvent");// 固定格式
+			//然后初始化自定义对象
+			ev.initCustomEvent(eventName,true,true,{}); //参数为:事件名称,是否冒泡,可否阻止默认事件,其他数据
+			//接着派发事件对象
+			dom.dispatchEvent(ev);
+			//最后事件监听, 到这里就可以和click一样使用了
+		};
+		
+	</script>
+	<!--<section class="nav">
+		<a href=""><i class="iconfont icon-suo"></i><span>安全保障</span></a>
+		<a href=""><i class="iconfont icon-jiaruwomen"></i><span>关于我们</span></a>
+		<a href=""><i class="iconfont icon-xinshouzhiyin"></i><span>新手指引</span></a>
+		<a href="help.html"><i class="iconfont icon-wenhao"></i><span>帮助中心</span></a>
+	</section>-->
+	
+	<nav id="nav" class="mui-bar mui-bar-tab" style="
+    height: 65px;
+">
+	    <a id="index" class="mui-tab-item mui-active" href="http://192.168.0.222:8020/exclusive/index.html">
+	        <span class="mui-icon mui-icon-home"></span>
+	        <span class="mui-tab-label">首页</span>
+	    </a>
+	    <a id="category" class="mui-tab-item" href="http://192.168.0.222:8020/exclusive/welfare.html">
+	        <span class="mui-icon mui-icon-phone"></span>
+	        <span class="mui-tab-label">福利</span>
+	    </a>
+	    <a class="mui-tab-item" href="http://192.168.0.222:8020/exclusive/log.html">
+	        <span class="mui-icon mui-icon-phone"></span>
+	        <span class="mui-tab-label">日志</span>
+	    </a>
+	    <a class="mui-tab-item" href="http://192.168.0.222:8020/exclusive/album.html">
+	        <span class="mui-icon mui-icon-email"></span>
+	        <span class="mui-tab-label">相册</span>
+	    </a>
+	    <a class="mui-tab-item" href="http://192.168.0.222:8020/exclusive/message.html">
+	        <span class="mui-icon mui-icon-gear"></span>
+	        <span class="mui-tab-label">游戏</span>
+	    </a>
+	</nav>
+	
+	
+
+</body></html>
